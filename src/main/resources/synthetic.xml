@@ -20,9 +20,9 @@
         <property name="checkConfigurationContentType" hidden="true" default="application/json"/>
 
         <!-- seeker only allows access tokens -->
-        <property name="username" hidden="true" default=""/>
-        <property name="password" hidden="true" default=""/>
-        <property name="accessToken" label="Access Token"/>
+        <property name="username" hidden="true" default="unused"/>
+        <property name="password" hidden="true" default="unused"/>
+        <property name="accessToken" password="true" label="Access Token"/>
     </type>
 
     <type type="seeker.Task" extends="xlrelease.PythonScript" virtual="true">
