@@ -12,18 +12,29 @@ import com.xhaus.jyson.JysonCodec as json
 import sys
 
 # example API connection URL https://seeker-vm.synopsys-alliances.com:8443/rest/api/latest/vulnerabilities?format=JSON&maxResults=1
-params = { 'url': configuration.url }
-req = HttpRequest(params)
+req = HttpRequest(server)
 
-api_url = "/rest/api/latest/vulnerabilities?format=JSON&maxResults=1"
+headers = {'Accept': 'text/plain', 'Authorization': 'Bearer %s' % server['accessToken'] }
 
-headers = {'Accept': 'text/plain', 'Authorization': 'Bearer %s' % configuration.accessToken }
+api_url = "/rest/api/latest/vulnerabilities?format=JSON&statuses=DETECTED"
+api_url += "&projectKeys=%s" % (projectKey)
+api_url += "&projectVersions=%s" % (projectVersion)
+api_url += "&minSeverity=%s" % (str(severity))
+api_url += "&maxSeverity=%s" % (str(severity))
 
 # Get http response from the server
 response = req.get(api_url, contentType = 'application/json', headers=headers )
 
-logger.info('Http Response code is %s' % response.status)
+print('Http Response code is %s.\r\n' % response.status)
+
 # check response status code, if is different than 200 exit with error code
 if response.status != 200:
     sys.exit("Couldn't establish the connection with server: [%s]." % response.response)
- 
+
+vulnerabilities = json.loads(response.response)
+
+print("%s vulnerabilities (under or equal to threshold of %s) with severity %s found for project with key %s and version %s" % (len(vulnerabilities), threshold, severity, projectKey, projectVersion))
+
+if (len(vulnerabilities) > int(threshold)):
+	sys.exit("More vulnerabilities (%s) found than threshold (%s).\r\n" % (len(vulnerabilities), threshold))
+

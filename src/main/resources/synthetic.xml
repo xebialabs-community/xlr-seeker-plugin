@@ -25,6 +25,21 @@
         <property name="accessToken" password="true" label="Access Token"/>
     </type>
 
+    <type type="seeker.CheckCompliance" extends="seeker.Task">
+        <property name="projectKey" category="input" required="true" label="Project Key"/>
+        <property name="projectVersion" category="input" label="Project Version" description="Leave empty for latest version"/>
+        <property name="severity" category="input" label="Severity" required="true" kind="enum">
+            <enum-values>
+                <value>CRITICAL</value>
+                <value>HIGH</value>
+                <value>MEDIUM</value>
+                <value>LOW</value>
+                <value>INFO</value>
+            </enum-values>
+        </property>
+        <property name="threshold" category="input" required="true" label="Threshold amount of vulnerabilities"/>
+    </type>
+
     <type type="seeker.Task" extends="xlrelease.PythonScript" virtual="true">
         <property name="taskColor" hidden="true" default="#542E7D"/>
         <property name="iconLocation" default="seeker/synopsys_color.png" hidden="true"/>
